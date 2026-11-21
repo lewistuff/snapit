@@ -7,10 +7,10 @@
 - [x] T002 `build/Info.plist`, `Makefile` (test/build/app/run/measure), `scripts/measure.sh`
 
 ## Phase 2 — Foundation (pure Rust, `src/core`, tested)
-- [ ] T003 [P] `settings`: defaults, load/save, partial and corrupt files
-- [ ] T004 [P] `files`: `snapit-YYYY-MM-DD-HHMMSS.png`, collision suffixes, `ensure_dir`, local time
-- [ ] T005 [P] `hotkey`: parse/format, Carbon keycodes, modifier masks, conflict list
-- [ ] T006 [P] `annotate`: Doc, tool state machine, hit-testing, steps, undo/redo, dirty flag
+- [x] T003 [P] `settings`: defaults, load/save, partial and corrupt files
+- [x] T004 [P] `files`: `snapit-YYYY-MM-DD-HHMMSS.png`, collision suffixes, `ensure_dir`, local time
+- [x] T005 [P] `hotkey`: parse/format, Carbon keycodes, modifier masks, conflict list
+- [x] T006 [P] `annotate`: Doc, tool state machine, hit-testing, steps, undo/redo, dirty flag
 
 ## Phase 3 — US1 Quick region capture (P1) 🎯
 - [ ] T007 Spike: status item + Carbon hotkey (`src/main.rs`)
