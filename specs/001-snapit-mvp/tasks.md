@@ -28,7 +28,7 @@
 
 ## Phase 5 — US4 First run and Preferences (P2)
 - [ ] T017 Permission onboarding at launch and on a hotkey press without permission; deep link
-- [ ] T018 `mac/prefs.rs`: four shortcut recorders, folder picker, save-quick checkbox, launch at login
+- [x] T018 `mac/prefs.rs`: four shortcut recorders, folder picker, save-quick checkbox, launch at login
 - [ ] T019 `app.rs` prefs handlers: validate, save, re-register, warn on conflict or registration failure
 - [ ] 🧑 T020 Checkpoint: grant flow, rebind, change folder, toggles
 
