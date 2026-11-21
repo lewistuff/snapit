@@ -16,7 +16,7 @@
 - [x] T007 Spike: status item + Carbon hotkey (`src/main.rs`)
 - [x] T009 **Spike gate**: bundle 288 KB, footprint 13 MB, 0 CPU, 0 sockets (research R7)
 - [x] T008 `mac/hotkey.rs` + `mac/status.rs`: register/unregister by action, menu (Preferences…, Open Save Folder, About, Quit), feedback flash, alerts, main menu
-- [ ] T010 `mac/capture.rs`: permission, SCShareableContent prefetch, region capture excluding snapit, PNG, pasteboard, file write
+- [x] T010 `mac/capture.rs`: permission, SCShareableContent prefetch, region capture excluding snapit, PNG, pasteboard, file write
 - [ ] T011 `mac/overlay.rs`: per-screen non-activating panels, crosshair, drag rectangle, W×H label, Esc, tiny-selection cancel
 - [ ] T012 `app.rs`: hotkey → busy guard → permission → overlay → export → feedback
 - [ ] 🧑 T013 Checkpoint: ⌘⇧C, drag, paste. Esc cancels. Focus returns to the previous app.
