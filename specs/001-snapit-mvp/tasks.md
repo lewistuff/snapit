@@ -3,8 +3,8 @@
 `[P]` = can run in parallel (different files, no dependency). `[US#]` = user story. 🧑 = checkpoint that a person must verify by hand: it needs the permission prompt, real hotkeys or mouse drags, which an agent can't do.
 
 ## Phase 1 — Setup
-- [ ] T001 Cargo crate `snapit`, size-optimised release profile, `.gitignore`
-- [ ] T002 `build/Info.plist`, `Makefile` (test/build/app/run/measure), `scripts/measure.sh`
+- [x] T001 Cargo crate `snapit`, size-optimised release profile, `.gitignore`
+- [x] T002 `build/Info.plist`, `Makefile` (test/build/app/run/measure), `scripts/measure.sh`
 
 ## Phase 2 — Foundation (pure Rust, `src/core`, tested)
 - [ ] T003 [P] `settings`: defaults, load/save, partial and corrupt files

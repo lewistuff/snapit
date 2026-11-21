@@ -1,0 +1,5 @@
+/build/snapit
+/build/snapit.app
+.DS_Store
+
+/target
