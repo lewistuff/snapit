@@ -17,23 +17,23 @@
 - [x] T009 **Spike gate**: bundle 288 KB, footprint 13 MB, 0 CPU, 0 sockets (research R7)
 - [x] T008 `mac/hotkey.rs` + `mac/status.rs`: register/unregister by action, menu (Preferences…, Open Save Folder, About, Quit), feedback flash, alerts, main menu
 - [x] T010 `mac/capture.rs`: permission, SCShareableContent prefetch, region capture excluding snapit, PNG, pasteboard, file write
-- [ ] T011 `mac/overlay.rs`: per-screen non-activating panels, crosshair, drag rectangle, W×H label, Esc, tiny-selection cancel
-- [ ] T012 `app.rs`: hotkey → busy guard → permission → overlay → export → feedback
+- [x] T011 `mac/overlay.rs`: per-screen non-activating panels, crosshair, drag rectangle, W×H label, Esc, tiny-selection cancel
+- [x] T012 `app.rs`: hotkey → busy guard → permission → overlay → export → feedback
 - [ ] 🧑 T013 Checkpoint: ⌘⇧C, drag, paste. Esc cancels. Focus returns to the previous app.
 
 ## Phase 4 — US2 Capture + annotate (P2)
 - [x] T014 `mac/editor.rs` + `mac/render.rs`: window, toolbar, aspect-fit canvas, input → Doc, renderer, text field, flatten
-- [ ] T015 `app.rs` editor wiring: copy/save/done, close with discard prompt, release on close
+- [x] T015 `app.rs` editor wiring: copy/save/done, close with discard prompt, release on close
 - [ ] 🧑 T016 Checkpoint: ⌘⇧X, every tool, undo/redo, move/delete/recolor, renumbering, Done → paste, ⌘S → file
 
 ## Phase 5 — US4 First run and Preferences (P2)
-- [ ] T017 Permission onboarding at launch and on a hotkey press without permission; deep link
+- [x] T017 Permission onboarding at launch and on a hotkey press without permission; deep link
 - [x] T018 `mac/prefs.rs`: four shortcut recorders, folder picker, save-quick checkbox, launch at login
-- [ ] T019 `app.rs` prefs handlers: validate, save, re-register, warn on conflict or registration failure
+- [x] T019 `app.rs` prefs handlers: validate, save, re-register, warn on conflict or registration failure
 - [ ] 🧑 T020 Checkpoint: grant flow, rebind, change folder, toggles
 
 ## Phase 6 — US3 Window capture (P3)
-- [ ] T021 Overlay window mode: CGWindowList hit-test, highlight, desktop-independent window capture with no shadow
+- [x] T021 Overlay window mode: CGWindowList hit-test, highlight, desktop-independent window capture with no shadow
 - [ ] 🧑 T022 Checkpoint: bind quick-window, capture an overlapped window
 
 ## Phase 7 — Polish
