@@ -22,7 +22,7 @@
 - [ ] 🧑 T013 Checkpoint: ⌘⇧C, drag, paste. Esc cancels. Focus returns to the previous app.
 
 ## Phase 4 — US2 Capture + annotate (P2)
-- [ ] T014 `mac/editor.rs` + `mac/render.rs`: window, toolbar, aspect-fit canvas, input → Doc, renderer, text field, flatten
+- [x] T014 `mac/editor.rs` + `mac/render.rs`: window, toolbar, aspect-fit canvas, input → Doc, renderer, text field, flatten
 - [ ] T015 `app.rs` editor wiring: copy/save/done, close with discard prompt, release on close
 - [ ] 🧑 T016 Checkpoint: ⌘⇧X, every tool, undo/redo, move/delete/recolor, renumbering, Done → paste, ⌘S → file
 
