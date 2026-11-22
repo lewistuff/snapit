@@ -37,7 +37,7 @@
 - [ ] 🧑 T022 Checkpoint: bind quick-window, capture an overlapped window
 
 ## Phase 7 — Polish
-- [ ] T023 `cargo clippy` clean; `cargo test` 25 passing, including a pixel test of the render/flatten path
-- [ ] T024 `make measure` → bundle 488 KB, footprint 14 MB (SC-001 ✅), RSS 71 MB (shared AppKit pages, not the metric), 0 CPU over 30 s, 0 sockets
-- [ ] T025 quickstart.md, README.md
+- [x] T023 `cargo clippy` clean; `cargo test` 25 passing, including a pixel test of the render/flatten path
+- [x] T024 `make measure` → bundle 488 KB, footprint 14 MB (SC-001 ✅), RSS 71 MB (shared AppKit pages, not the metric), 0 CPU over 30 s, 0 sockets
+- [x] T025 quickstart.md, README.md
 - [ ] 🧑 T026 SC-003 / SC-005 / SC-007 timings with real captures
