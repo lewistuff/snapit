@@ -2,6 +2,10 @@
 name = "snapit"
 version = "0.1.0"
 edition = "2024"
+description = "A tiny macOS menu bar screenshot and annotation tool"
+license = "MIT"
+repository = "https://github.com/lewistuff/snapit"
+readme = "README.md"
 publish = false
 
 [dependencies]
