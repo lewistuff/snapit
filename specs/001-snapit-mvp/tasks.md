@@ -41,3 +41,9 @@
 - [x] T024 `make measure` → bundle 488 KB, footprint 14 MB (SC-001 ✅), RSS 71 MB (shared AppKit pages, not the metric), 0 CPU over 30 s, 0 sockets
 - [x] T025 quickstart.md, README.md
 - [ ] 🧑 T026 SC-003 / SC-005 / SC-007 timings with real captures
+
+## Phase 8 — Feedback round 1 (2026-11-21)
+- [x] T027 Editor: native unified `NSToolbar`. The window grows until the toolbar reports every item visible, so nothing goes into the overflow menu.
+- [x] T028 Default annotation size is small. Sizes are shown as dots. Keys: 1–6 for colors, [ and ] for size. Every toolbar tooltip names its shortcut, and the menu bar tooltip lists the capture hotkeys.
+- [x] T029 Stable signing: `scripts/sign.sh` with a self-signed `snapit-dev` certificate in its own keychain.
+- [x] T030 Aperture app icon (`scripts/make-icon.swift` → `assets/AppIcon.icns`) and a matching template menu bar icon.

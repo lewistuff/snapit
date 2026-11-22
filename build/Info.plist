@@ -6,6 +6,8 @@
 	<string>snapit</string>
 	<key>CFBundleDisplayName</key>
 	<string>snapit</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
 	<string>dev.snapit.app</string>
 	<key>CFBundleExecutable</key>
