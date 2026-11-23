@@ -5,6 +5,7 @@
 ```sh
 make test     # unit tests (core) plus the render/flatten pixel test
 make run      # release build → build/snapit.app (signed, see below) → open
+make bench    # export/editor micro-benchmarks (release, src/bench.rs)
 make measure  # bundle size, idle footprint, CPU, sockets
 ```
 

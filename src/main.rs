@@ -1,6 +1,8 @@
 //! snapit: a lightweight macOS menu bar screenshot and annotation tool.
 
 mod app;
+#[cfg(test)]
+mod bench;
 mod core;
 mod mac;
 

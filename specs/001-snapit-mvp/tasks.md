@@ -47,3 +47,6 @@
 - [x] T028 Default annotation size is small. Sizes are shown as dots. Keys: 1–6 for colors, [ and ] for size. Every toolbar tooltip names its shortcut, and the menu bar tooltip lists the capture hotkeys.
 - [x] T029 Stable signing: `scripts/sign.sh` with a self-signed `snapit-dev` certificate in its own keychain.
 - [x] T030 Aperture app icon (`scripts/make-icon.swift` → `assets/AppIcon.icns`) and a matching template menu bar icon.
+
+## Phase 9 — Benchmarks (2026-11-23)
+- [x] T031 `make bench`: `#[ignore]`d micro-benchmarks in `src/bench.rs` (PNG encode at Retina/5K for UI and worst-case content, pasteboard write, flatten, Doc render/hit-test/drag/undo). No new dependencies. Results in README.md

@@ -2,10 +2,13 @@ APP      := build/snapit.app
 BIN      := target/release/snapit
 export MACOSX_DEPLOYMENT_TARGET := 14.0
 
-.PHONY: test build app run measure clean
+.PHONY: test bench build app run measure clean
 
 test:
 	cargo test
+
+bench:
+	cargo test --release -q -- --ignored --nocapture --test-threads=1 bench_
 
 build:
 	cargo build --release
