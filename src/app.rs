@@ -19,7 +19,7 @@ use crate::mac::capture::{self, Image};
 use crate::mac::editor::{self, Editor};
 use crate::mac::overlay::{self, Mode, Outcome};
 use crate::mac::prefs::{self, Prefs};
-use crate::mac::status::Status;
+use crate::mac::status::{self, Status};
 use crate::mac::{self, alert, alert_later, beep, hotkey, ns};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -234,7 +234,7 @@ fn quick_export(img: Image) {
             alert_later("Copied to the clipboard, but not saved", &e);
         }
     });
-    with(|a| a.status.flash());
+    with(|a| a.status.flash(&a.settings.sound));
 }
 
 // ---- editor --------------------------------------------------------------
@@ -324,7 +324,7 @@ pub fn editor_event(ev: EditorEvent) {
             Export::Copy { close } => {
                 es.doc.mark_clean();
                 capture::export(flat, true, None, |_| {});
-                a.status.flash();
+                a.status.flash(&a.settings.sound);
                 close.then(|| {
                     let ui = es.ui.clone();
                     Box::new(move || ui.close()) as Box<dyn FnOnce()>
@@ -335,7 +335,7 @@ pub fn editor_event(ev: EditorEvent) {
                     Ok(path) => capture::export(flat, false, Some(path), |res| match res {
                         Ok(()) => {
                             with(|a| {
-                                a.status.flash();
+                                a.status.flash(&a.settings.sound);
                                 if let Some(es) = &mut a.editor {
                                     es.doc.mark_clean();
                                 }
@@ -431,6 +431,8 @@ pub enum PrefsEvent {
     SetFolder(std::path::PathBuf),
     SaveQuick(bool),
     LaunchAtLogin(bool),
+    /// A system sound name, or empty for none.
+    Sound(String),
     Closed,
 }
 
@@ -475,6 +477,11 @@ pub fn prefs_event(ev: PrefsEvent) {
         }
         PrefsEvent::SaveQuick(on) => {
             a.settings.save_quick_captures = on;
+            a.save_settings();
+        }
+        PrefsEvent::Sound(name) => {
+            status::play_sound(&name);
+            a.settings.sound = name;
             a.save_settings();
         }
         PrefsEvent::LaunchAtLogin(on) => match prefs::set_login_item(on) {

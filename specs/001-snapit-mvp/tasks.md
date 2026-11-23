@@ -52,3 +52,4 @@
 - [x] T031 `make bench`: `#[ignore]`d micro-benchmarks in `src/bench.rs` (PNG encode at Retina/5K for UI and worst-case content, pasteboard write, flatten, Doc render/hit-test/drag/undo). No new dependencies. Results in README.md
 - [x] T032 Clipboard promise: export writes an `NSPasteboardItem` data provider immediately and encodes in the background; a paste before the encode finishes waits for it, and once encoded the promise is swapped for the real data. Clipboard ready < 0.1 ms at any size (was 24–921 ms)
 - [ ] 🧑 T033 Checkpoint: ⌘⇧C then paste immediately into Slack/Notes; paste a 5K capture; copy something else before the encode finishes
+- [x] T034 Capture sound in Preferences: None or any system sound (default Tink), previews on selection; unknown names in settings.json fall back to the default

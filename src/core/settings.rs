@@ -88,6 +88,14 @@ impl Hotkeys {
     }
 }
 
+/// System sounds (in /System/Library/Sounds) offered for capture feedback.
+pub const SOUNDS: [&str; 14] = [
+    "Basso", "Blow", "Bottle", "Frog", "Funk", "Glass", "Hero", "Morse", "Ping", "Pop", "Purr", "Sosumi", "Submarine",
+    "Tink",
+];
+
+pub const DEFAULT_SOUND: &str = "Tink";
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct Settings {
@@ -95,6 +103,8 @@ pub struct Settings {
     pub save_dir: PathBuf,
     pub save_quick_captures: bool,
     pub launch_at_login: bool,
+    /// Played when a capture is ready: one of [`SOUNDS`], or empty for silence.
+    pub sound: String,
 }
 
 impl Default for Settings {
@@ -104,6 +114,7 @@ impl Default for Settings {
             save_dir: files::default_dir(),
             save_quick_captures: false,
             launch_at_login: false,
+            sound: DEFAULT_SOUND.into(),
         }
     }
 }
@@ -128,6 +139,9 @@ pub fn load(path: &Path) -> (Settings, Option<io::Error>) {
                 s.save_dir = files::default_dir();
             }
             s.save_dir = files::expand_home(&s.save_dir.to_string_lossy());
+            if !s.sound.is_empty() && !SOUNDS.contains(&s.sound.as_str()) {
+                s.sound = DEFAULT_SOUND.into();
+            }
             (s, None)
         }
         Err(e) => (Settings::default(), Some(e.into())),
@@ -166,6 +180,7 @@ mod tests {
         assert_eq!(d.hotkeys.get(Action::QuickWindow), "");
         assert_eq!(d.hotkeys.get(Action::EditWindow), "");
         assert!(!d.save_quick_captures && !d.launch_at_login);
+        assert_eq!(d.sound, "Tink");
         assert_eq!(d.save_dir, files::default_dir());
     }
 
@@ -184,6 +199,7 @@ mod tests {
         s.hotkeys.set(Action::QuickWindow, "opt+cmd+w");
         s.save_dir = "/tmp/shots".into();
         s.save_quick_captures = true;
+        s.sound = String::new();
         save(&p, &s).unwrap();
         let (got, err) = load(&p);
         assert!(err.is_none());
@@ -199,6 +215,16 @@ mod tests {
         assert!(s.save_quick_captures);
         assert_eq!(s.hotkeys.get(Action::QuickRegion), "shift+cmd+c");
         assert_eq!(s.save_dir, files::default_dir());
+        assert_eq!(s.sound, DEFAULT_SOUND);
+    }
+
+    #[test]
+    fn unknown_sound_falls_back() {
+        let p = tmp("sound").join("s.json");
+        std::fs::write(&p, r#"{"sound": "Klaxon"}"#).unwrap();
+        assert_eq!(load(&p).0.sound, DEFAULT_SOUND);
+        std::fs::write(&p, r#"{"sound": ""}"#).unwrap();
+        assert_eq!(load(&p).0.sound, "");
     }
 
     #[test]

@@ -1,5 +1,6 @@
 //! The Preferences window: four shortcut recorders, the save folder, the
-//! "also save quick captures" toggle and launch at login (SMAppService).
+//! "also save quick captures" toggle, the capture sound and launch at login
+//! (SMAppService).
 
 use std::cell::{Cell, OnceCell};
 use std::path::{Path, PathBuf};
@@ -9,8 +10,8 @@ use objc2::runtime::{AnyObject, ProtocolObject};
 use objc2::{DefinedClass, MainThreadMarker, MainThreadOnly, define_class, msg_send, sel};
 use objc2_app_kit::{
     NSBackingStoreType, NSButton, NSColor, NSControlStateValueOff, NSControlStateValueOn, NSEvent,
-    NSEventModifierFlags, NSFont, NSLineBreakMode, NSModalResponseOK, NSOpenPanel, NSTextField, NSView, NSWindow,
-    NSWindowDelegate, NSWindowStyleMask,
+    NSEventModifierFlags, NSFont, NSLineBreakMode, NSMenuItem, NSModalResponseOK, NSOpenPanel, NSPopUpButton,
+    NSTextField, NSView, NSWindow, NSWindowDelegate, NSWindowStyleMask,
 };
 use objc2_foundation::{NSNotification, NSObject, NSObjectProtocol, NSPoint, NSRect, NSSize, ns_string};
 use objc2_service_management::{SMAppService, SMAppServiceStatus};
@@ -18,9 +19,10 @@ use objc2_service_management::{SMAppService, SMAppServiceStatus};
 use super::ns;
 use crate::app::{self, PrefsEvent};
 use crate::core::hotkey::{self, Binding};
-use crate::core::settings::{Action, Settings};
+use crate::core::settings::{Action, SOUNDS, Settings};
 
 const UNSET: &str = "Record Shortcut";
+const NO_SOUND: &str = "None";
 
 pub struct RecorderIvars {
     action: Action,
@@ -173,6 +175,13 @@ define_class!(
             app::prefs_event(PrefsEvent::SaveQuick(sender.state() == NSControlStateValueOn));
         }
 
+        #[unsafe(method(chooseSound:))]
+        fn choose_sound(&self, sender: &NSPopUpButton) {
+            let title = sender.titleOfSelectedItem().map(|t| t.to_string()).unwrap_or_default();
+            let name = if title == NO_SOUND { String::new() } else { title };
+            app::prefs_event(PrefsEvent::Sound(name));
+        }
+
         #[unsafe(method(toggleLogin:))]
         fn toggle_login(&self, sender: &NSButton) {
             app::prefs_event(PrefsEvent::LaunchAtLogin(sender.state() == NSControlStateValueOn));
@@ -207,7 +216,7 @@ fn rect(x: f64, y: f64, w: f64, h: f64) -> NSRect {
 }
 
 pub fn open(mtm: MainThreadMarker, settings: &Settings, login_enabled: bool) -> Prefs {
-    let (w, h) = (520.0, 400.0);
+    let (w, h) = (520.0, 440.0);
     // SAFETY: kept alive through Retained; release-on-close disabled.
     let window = unsafe {
         let win = NSWindow::initWithContentRect_styleMask_backing_defer(
@@ -297,6 +306,24 @@ pub fn open(mtm: MainThreadMarker, settings: &Settings, login_enabled: bool) -> 
     save_quick.setFrame(rect(228.0, y, 280.0, 20.0));
     save_quick.setState(if settings.save_quick_captures { NSControlStateValueOn } else { NSControlStateValueOff });
     root.addSubview(&save_quick);
+
+    y -= 36.0;
+    root.addSubview(&label(mtm, "Capture sound", rect(20.0, y + 4.0, 200.0, 18.0)));
+    let sound = NSPopUpButton::initWithFrame_pullsDown(NSPopUpButton::alloc(mtm), rect(228.0, y, 174.0, 26.0), false);
+    sound.addItemWithTitle(&ns(NO_SOUND));
+    if let Some(menu) = sound.menu() {
+        menu.addItem(&NSMenuItem::separatorItem(mtm));
+    }
+    for name in SOUNDS {
+        sound.addItemWithTitle(&ns(name));
+    }
+    sound.selectItemWithTitle(&ns(if settings.sound.is_empty() { NO_SOUND } else { &settings.sound }));
+    // SAFETY: target outlives the pop-up.
+    unsafe {
+        sound.setTarget(Some(&target));
+        sound.setAction(Some(sel!(chooseSound:)));
+    }
+    root.addSubview(&sound);
 
     y -= 40.0;
     // SAFETY: target outlives the checkbox.

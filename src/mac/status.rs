@@ -153,15 +153,24 @@ impl Status {
     }
 
     /// Brief confirmation after a capture: a checkmark in the menu bar and a soft sound.
-    pub fn flash(&self) {
+    /// Shows the done icon briefly and plays `sound` (see [`play_sound`]).
+    pub fn flash(&self, sound: &str) {
         self.set_icon(&self.done_icon);
-        if let Some(sound) = NSSound::soundNamed(ns_string!("Tink")) {
-            sound.play();
-        }
+        play_sound(sound);
         // SAFETY: restoreIcon: exists on MenuTarget and takes an object argument.
         let _: () = unsafe {
             msg_send![&*self.target, performSelector: sel!(restoreIcon:), withObject: Option::<&AnyObject>::None, afterDelay: 0.7f64]
         };
+    }
+}
+
+/// Plays a system sound by name. Empty (or an unknown name) is silent.
+pub fn play_sound(name: &str) {
+    if !name.is_empty()
+        && let Some(sound) = NSSound::soundNamed(&ns(name))
+    {
+        sound.stop(); // restart if a preview is still playing
+        sound.play();
     }
 }
 

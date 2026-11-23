@@ -152,7 +152,7 @@ A new user installs snapit, launches it, and is guided through granting Screen R
 
 **App & settings**
 - **FR-019**: The system MUST detect missing Screen Recording permission and guide the user to grant it.
-- **FR-020**: The system MUST provide a Preferences window for hotkeys, save folder, the "Also save quick captures to folder" setting, and launch at login.
+- **FR-020**: The system MUST provide a Preferences window for hotkeys, save folder, the "Also save quick captures to folder" setting, the capture sound (a system sound, or none), and launch at login.
 - **FR-021**: Settings MUST persist across restarts.
 - **FR-022**: The system MUST NOT make any network requests (no telemetry, no update pings) in v1.
 

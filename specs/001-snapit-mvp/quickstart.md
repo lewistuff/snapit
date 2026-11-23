@@ -59,6 +59,6 @@ These need a person, because they involve the permission prompt, real hotkeys or
 
 - **T013**: ⌘⇧C, drag, then paste into Slack or Notes. Esc cancels. Focus returns to the previous app.
 - **T016**: ⌘⇧X. Try every tool, undo/redo, move/delete/recolor, and step renumbering. Done → paste. ⌘S → file.
-- **T020**: Rebind a shortcut. Change the folder. Toggle "also save" and launch at login.
+- **T020**: Rebind a shortcut. Change the folder. Toggle "also save" and launch at login. Pick a capture sound (it previews) and None (captures are silent).
 - **T022**: Bind the window capture shortcut and capture a window that's partly covered by another.
 - **T026**: Time hotkey → overlay (< 100 ms) and release → clipboard (< 300 ms). Check memory after closing the editor on a 5K capture.
