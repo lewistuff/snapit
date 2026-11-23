@@ -267,11 +267,31 @@ fn settle(pb: &NSPasteboard, count: isize, pending: &PendingPng) {
     }
 }
 
+/// Why an export didn't fully succeed.
+#[derive(Debug)]
+pub enum ExportError {
+    /// The PNG couldn't be encoded: nothing reached the clipboard or the disk,
+    /// and the clipboard promise has been withdrawn.
+    Encode,
+    /// The clipboard (if asked for) has the PNG, but writing the file failed.
+    Save(String),
+}
+
+impl std::fmt::Display for ExportError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            ExportError::Encode => f.write_str("Couldn't encode the image as PNG"),
+            ExportError::Save(e) => f.write_str(e),
+        }
+    }
+}
+
 /// Puts a promise of `img` as PNG on the pasteboard straight away if
 /// `clipboard`, then encodes off the main thread and writes it to `path` if
-/// given. `done` runs on the main thread with the save error, if any. The
-/// clipboard is ready when this returns, so callers can give feedback then.
-pub fn export(img: Image, clipboard: bool, path: Option<PathBuf>, done: impl FnOnce(Result<(), String>) + 'static) {
+/// given. `done` runs on the main thread with the outcome. The clipboard is
+/// ready when this returns, so callers can give feedback then, and must report
+/// an [`ExportError::Encode`] as the copy having failed.
+pub fn export(img: Image, clipboard: bool, path: Option<PathBuf>, done: impl FnOnce(Result<(), ExportError>) + 'static) {
     let pending = PendingPng::new();
     let promise = clipboard.then(|| promise_png(&NSPasteboard::generalPasteboard(), &pending));
     let img = MainOnly(img);
@@ -284,12 +304,12 @@ pub fn export(img: Image, clipboard: bool, path: Option<PathBuf>, done: impl FnO
         // Hand the PNG to any waiting paste before touching the disk.
         pending.fulfil(png.clone());
         let saved = match (&png, &path) {
-            (None, _) => Err("Couldn't encode the image".to_string()),
+            (None, _) => Err(ExportError::Encode),
             (Some(data), Some(p)) => {
                 if data.writeToFile_atomically(&ns(&p.to_string_lossy()), true) {
                     Ok(())
                 } else {
-                    Err(format!("Couldn't write {}", p.display()))
+                    Err(ExportError::Save(format!("Couldn't write {}", p.display())))
                 }
             }
             (Some(_), None) => Ok(()),

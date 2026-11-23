@@ -184,6 +184,10 @@ impl Doc {
     pub fn dirty(&self) -> bool {
         self.dirty
     }
+    /// Marks the edits unexported again, e.g. after a copy failed.
+    pub fn mark_dirty(&mut self) {
+        self.dirty = true;
+    }
     pub fn mark_clean(&mut self) {
         self.dirty = false;
     }

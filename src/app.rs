@@ -15,7 +15,7 @@ use crate::core::annotate::{Doc, Point, Tool};
 use crate::core::files::{self, Stamp};
 use crate::core::hotkey::Binding;
 use crate::core::settings::{self, Action, Settings};
-use crate::mac::capture::{self, Image};
+use crate::mac::capture::{self, ExportError, Image};
 use crate::mac::editor::{self, Editor};
 use crate::mac::overlay::{self, Mode, Outcome};
 use crate::mac::prefs::{self, Prefs};
@@ -230,7 +230,14 @@ fn quick_export(img: Image) {
         None => (None, None),
     };
     capture::export(img, true, path, move |res| {
-        if let Some(e) = path_err.or(res.err()) {
+        let not_saved = match res {
+            Err(ExportError::Encode) => {
+                return alert_later("Couldn't copy the image", "Encoding it as PNG failed, so nothing was copied or saved.");
+            }
+            Err(ExportError::Save(e)) => Some(e),
+            Ok(()) => path_err,
+        };
+        if let Some(e) = not_saved {
             alert_later("Copied to the clipboard, but not saved", &e);
         }
     });
@@ -323,7 +330,16 @@ pub fn editor_event(ev: EditorEvent) {
         match export {
             Export::Copy { close } => {
                 es.doc.mark_clean();
-                capture::export(flat, true, None, |_| {});
+                capture::export(flat, true, None, |res| {
+                    if res.is_err() {
+                        with(|a| {
+                            if let Some(es) = &mut a.editor {
+                                es.doc.mark_dirty();
+                            }
+                        });
+                        alert_later("Couldn't copy the image", "Encoding it as PNG failed, so nothing was copied.");
+                    }
+                });
                 a.status.flash(&a.settings.sound);
                 close.then(|| {
                     let ui = es.ui.clone();
@@ -341,7 +357,7 @@ pub fn editor_event(ev: EditorEvent) {
                                 }
                             });
                         }
-                        Err(e) => alert_later("Couldn't save", &e),
+                        Err(e) => alert_later("Couldn't save", &e.to_string()),
                     }),
                     Err(e) => alert_later("Couldn't save", &e),
                 }
