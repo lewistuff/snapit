@@ -41,13 +41,13 @@ Measured on an Apple M5 Pro running macOS 27.0.1, release build. Times are media
 | CPU time over 30 s | 0 s | ≈ 0 |
 | Network sockets | 0 | 0 |
 
-**Quick capture**: what runs after you release the mouse, apart from the ScreenCaptureKit grab itself (`make bench`):
+**Quick capture**: what runs after you release the mouse, apart from the ScreenCaptureKit grab itself (`make bench`). snapit puts a *promise* of the PNG on the clipboard straight away and encodes in the background, so the clipboard is ready almost immediately. A paste that arrives before the encode finishes waits only for the rest of it.
 
 | | Retina (3024×1964) | 5K (5120×2880) |
 |---|---|---|
-| PNG encode, typical UI screenshot | 24 ms | 61 ms |
-| PNG encode, worst case (every pixel random) | 369 ms | 921 ms |
-| Clipboard write | < 0.1 ms | < 0.1 ms |
+| Clipboard ready (promise written, feedback shown) | < 0.1 ms | < 0.1 ms |
+| Background PNG encode, typical UI screenshot | 24 ms | 61 ms |
+| Background PNG encode, worst case (every pixel random) | 369 ms | 921 ms |
 
 **Editor** (`make bench`, on a 5K capture):
 
@@ -57,7 +57,7 @@ Measured on an Apple M5 Pro running macOS 27.0.1, release build. Times are media
 | Per mouse move while drawing | 0.2 µs | 1.3 µs (200) |
 | Hit test | 0.1 µs | 0.8 µs (200) |
 
-Encoding a typical screenshot takes well under the 300 ms capture-to-clipboard budget. Photo-like content with no flat areas is the PNG worst case and can go over it on large displays. Hotkey → overlay latency and the capture itself need real input and Screen Recording access, so they are checked by hand (see the quickstart).
+The clipboard is ready well inside the 300 ms capture-to-clipboard budget at any size. Only a paste made within a second of capturing a large, photo-like image can wait on the encode. Hotkey → overlay latency and the capture itself need real input and Screen Recording access, so they are checked by hand (see the quickstart).
 
 ## Layout
 

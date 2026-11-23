@@ -230,11 +230,11 @@ fn quick_export(img: Image) {
         None => (None, None),
     };
     capture::export(img, true, path, move |res| {
-        with(|a| a.status.flash());
         if let Some(e) = path_err.or(res.err()) {
             alert_later("Copied to the clipboard, but not saved", &e);
         }
     });
+    with(|a| a.status.flash());
 }
 
 // ---- editor --------------------------------------------------------------
@@ -323,9 +323,8 @@ pub fn editor_event(ev: EditorEvent) {
         match export {
             Export::Copy { close } => {
                 es.doc.mark_clean();
-                capture::export(flat, true, None, |_| {
-                    with(|a| a.status.flash());
-                });
+                capture::export(flat, true, None, |_| {});
+                a.status.flash();
                 close.then(|| {
                     let ui = es.ui.clone();
                     Box::new(move || ui.close()) as Box<dyn FnOnce()>

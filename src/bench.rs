@@ -139,6 +139,11 @@ fn bench_export() {
         // SAFETY: NSPasteboardTypePNG is a valid static type string.
         black_box(pb.setData_forType(Some(&data), unsafe { NSPasteboardTypePNG }));
     });
+    // What export now does before giving feedback: the PNG is promised, and
+    // encoded afterwards, so this is the time to "ready to paste".
+    bench("clipboard promise (any size)", 20, || {
+        black_box(capture::promise_for_test(&pb));
+    });
 }
 
 #[test]

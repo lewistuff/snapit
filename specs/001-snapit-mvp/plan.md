@@ -55,8 +55,8 @@ scripts/measure.sh     bundle size, RSS + phys_footprint, CPU, sockets
    2. The app checks it isn't busy and has permission, then calls `overlay::begin(Region)`.
    3. The overlay prefetches `SCShareableContent`. On mouse release it captures with snapit excluded.
    4. `app::on_captured(img)` calls `capture::export(img, clipboard, save_path)`.
-   5. The PNG is encoded off the main thread, the file written if needed, and the pasteboard set on main.
-   6. The menu bar icon flashes and a sound plays.
+   5. A promise of the PNG goes on the pasteboard at once and the menu bar icon flashes and a sound plays.
+   6. The PNG is encoded off the main thread and the file written if needed. A paste before then waits for the encode; afterwards the promise is swapped for the real data on main.
 2. **Capture + edit (⌘⇧X)**: same steps up to `on_captured`. Then `editor::open(img, scale)`.
    - Input goes to `Doc` and then a redraw.
    - Copy, Save or Done flattens the image (`render` into a bitmap context) and then takes the export path above.
